@@ -7,7 +7,7 @@ const MainLayout = () => {
       <div className="col-span-3">
         <Navbar></Navbar>
       </div>
-      <div className="col-span-9">
+      <div className="col-span-9 bg-[#282828] text-slate-100">
         <Outlet></Outlet>
       </div>
     </div>

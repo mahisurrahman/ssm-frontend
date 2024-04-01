@@ -1,6 +1,6 @@
 const NavImgTitle = () => {
   return (
-    <div className="flex flex-col justify-center items-center gap-5">
+    <div className="flex flex-col justify-center items-center gap-4">
       <img
         src="https://cdn.dribbble.com/users/6036446/screenshots/14616753/media/77137c7f55e7dbee4c4a028ce8379352.jpg?resize=768x576&vertical=center"
         className="w-28"
