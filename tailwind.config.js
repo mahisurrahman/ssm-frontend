@@ -2,10 +2,10 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    fontFamily:{
-      'poppins': "'Poppins', sans-serif", 
+    fontFamily: {
+      poppins: "'Poppins', sans-serif",
     },
     extend: {},
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };

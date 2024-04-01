@@ -1,4 +1,7 @@
 import { Helmet } from "react-helmet";
+import TotalOrders from "../../Components/HomeComponents/TotalOrders/TotalOrders";
+import TotalProductItems from "../../Components/HomeComponents/TotalProductItems/TotalProductItems";
+import TotalProfit from "../../Components/HomeComponents/TotalProfit/TotalProfit";
 
 const Home = () => {
   return (
@@ -7,7 +10,39 @@ const Home = () => {
         <title>Super Shop | Home</title>
       </Helmet>
       <div>
-        <h1>This is the Home page</h1>
+        <div className="px-10 py-4 grid grid-cols-3 gap-10">
+          <TotalOrders></TotalOrders>
+          <TotalProductItems></TotalProductItems>
+          <TotalProfit></TotalProfit>
+        </div>
+        <div className="px-10 py-4">
+          <hr />
+        </div>
+        <div className="px-10 py-4">
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              <thead className="text-yellow-400 ">
+                <tr>
+                  <th>Buying Price</th>
+                  <th>Product Name</th>
+                  <th>Selling Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>20</td>
+                  <td>Windows 11 Original Setup</td>
+                  <td>40</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Logitech Mouse</td>
+                  <td>10</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );
