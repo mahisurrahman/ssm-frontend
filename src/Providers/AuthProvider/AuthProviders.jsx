@@ -9,7 +9,6 @@ const AuthProviders = ({ children }) => {
   const [postRequest, getRequest] = useRequest();
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const baseURL = `http://localhost:8000`;
   const fetchProducts = async () => {
     let productsDetails = await getRequest(`/products/src`);
     setAllProducts(productsDetails.data.data);
