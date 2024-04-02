@@ -30,7 +30,7 @@ const NavMenus = () => {
           <h1>Products Lists</h1>
         </div>
       </Link>
-      <Link to="">
+      <Link to="/stock-list">
         <div className="text-sm mb-3 px-6 py-2 bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-4 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
           <GrStorage className="text-xl"></GrStorage>
           <h1>Stocks Lists</h1>

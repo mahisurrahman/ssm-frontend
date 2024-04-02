@@ -7,7 +7,7 @@ const TotalProfit = () => {
       <div className="text-right">
         <h1 className="text-xl font-extrabold tracking-widest">Total Profit</h1>
         <p className="text-2xl font-extrabold text-right">
-          <span className="text-[#3F4E4F]"> 10 </span>
+          <span className="text-[#3F4E4F]"> 0 </span>
         </p>
       </div>
     </div>

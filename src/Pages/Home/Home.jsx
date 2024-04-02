@@ -2,8 +2,25 @@ import { Helmet } from "react-helmet";
 import TotalOrders from "../../Components/HomeComponents/TotalOrders/TotalOrders";
 import TotalProductItems from "../../Components/HomeComponents/TotalProductItems/TotalProductItems";
 import TotalProfit from "../../Components/HomeComponents/TotalProfit/TotalProfit";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Home = () => {
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProducts = async () => {
+    let productsDetails = await axios.get(`http://localhost:8000/products/src`);
+    setAllProducts(productsDetails.data.data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  console.log(allProducts);
+
   return (
     <div>
       <Helmet>
@@ -12,7 +29,7 @@ const Home = () => {
       <div>
         <div className="px-10 py-4 grid grid-cols-3 gap-10">
           <TotalOrders></TotalOrders>
-          <TotalProductItems></TotalProductItems>
+          <TotalProductItems allProducts={allProducts}></TotalProductItems>
           <TotalProfit></TotalProfit>
         </div>
         <div className="px-10 py-4">
@@ -33,20 +50,6 @@ const Home = () => {
                   <td>20</td>
                   <td>Windows 8 Original Setup</td>
                   <td>40</td>
-                </tr>
-              </tbody>
-              <tbody className="bg-transparent border-2 border-black">
-                <tr className="">
-                  <td>40</td>
-                  <td>Windows 10 Original Setup</td>
-                  <td>80</td>
-                </tr>
-              </tbody>
-              <tbody className="bg-transparent border-2 border-black">
-                <tr className="">
-                  <td>80</td>
-                  <td>Windows 11 Original Setup</td>
-                  <td>160</td>
                 </tr>
               </tbody>
             </table>
