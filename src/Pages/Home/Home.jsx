@@ -2,25 +2,7 @@ import { Helmet } from "react-helmet";
 import TotalOrders from "../../Components/HomeComponents/TotalOrders/TotalOrders";
 import TotalProductItems from "../../Components/HomeComponents/TotalProductItems/TotalProductItems";
 import TotalProfit from "../../Components/HomeComponents/TotalProfit/TotalProfit";
-import axios from "axios";
-import { useEffect, useState } from "react";
-
 const Home = () => {
-  const [allProducts, setAllProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchProducts = async () => {
-    let productsDetails = await axios.get(`http://localhost:8000/products/src`);
-    setAllProducts(productsDetails.data.data);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  console.log(allProducts);
-
   return (
     <div>
       <Helmet>
@@ -29,7 +11,7 @@ const Home = () => {
       <div>
         <div className="px-10 py-4 grid grid-cols-3 gap-10">
           <TotalOrders></TotalOrders>
-          <TotalProductItems allProducts={allProducts}></TotalProductItems>
+          <TotalProductItems></TotalProductItems>
           <TotalProfit></TotalProfit>
         </div>
         <div className="px-10 py-4">
