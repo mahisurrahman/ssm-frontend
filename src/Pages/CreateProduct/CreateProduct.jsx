@@ -1,8 +1,50 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle";
 import { Helmet } from "react-helmet";
+import useRequest from "../../apiService/useRequest";
+import Swal from "sweetalert2";
 
 const CreateProduct = () => {
+  const [postRequest] = useRequest();
+  const [loading, setLoading] = useState(false);
+
+  if (loading === true) {
+    return (
+      <div className="w-10/12 mx-auto h-[100vh] flex justify-center items-center">
+        <span className="loading loading-spinner loading-lg"></span>;
+      </div>
+    );
+  }
+
+  const handleAddProduct = async (event) => {
+    setLoading(true);
+    event.preventDefault();
+    const form = event.target;
+    const prodName = form.productName.value;
+    const prodQty = form.productQuantity.value;
+    const description = form.productDescription.value;
+    const buyingPrice = form.productBuyingPrice.value;
+    const prodImg = form.productImageUrl.value;
+    const productDetails = {
+      productName: prodName,
+      description: description,
+      stockQuantity: prodQty,
+      price: buyingPrice,
+      productImg: prodImg,
+    };
+
+    let addProduct = await postRequest("/products/crt", productDetails);
+    if (addProduct?.data?.response?.data?.isActive === true) {
+      setLoading(false);
+      Swal.fire(
+        `Successfully Added the ${addProduct?.data?.response?.data?.productName} product`
+      );
+    } else {
+      Swal.fire("Failed to Add");
+    }
+  };
+
   return (
     <div>
       <Helmet>
@@ -16,36 +58,36 @@ const CreateProduct = () => {
           ></TitleAndSubtitle>
         </div>
         <div className="w-10/12 mx-auto mt-5">
-          <form>
+          <form onSubmit={handleAddProduct}>
             <div className="flex gap-2">
               <input
-                className="mb-4 w-full py-2 px-4 text-2xl font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
                 type="text"
                 name="productName"
                 placeholder="Product Name"
               />
               <input
-                className="mb-4 w-full py-2 px-4 text-2xl font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
                 type="number"
                 name="productQuantity"
                 placeholder="Product Quantity"
               />
             </div>
             <textarea
-              className="mb-4 w-full py-2 px-4 text-lg font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+              className="h-[150px] mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
               type="text"
               name="productDescription"
               placeholder="Product Description"
             />
             <div className="flex gap-2">
               <input
-                className="mb-4 w-full py-2 px-4 text-2xl font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
                 type="number"
                 name="productBuyingPrice"
                 placeholder="Product Buying Price"
               />
               <input
-                className="mb-4 w-full py-2 px-4 text-2xl font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-xs font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
                 type="text"
                 name="productImageUrl"
                 placeholder="Image URL"
@@ -53,7 +95,7 @@ const CreateProduct = () => {
             </div>
             <div className="w-full mt-5">
               <input
-                className="duration-700 w-full py-2 text-center border border-transparent bg-yellow-400 text-2xl rounded-lg text-[#000000] font-extrabold tracking-widest hover:bg-transparent hover:border-yellow-400 hover:text-slate-900 hover:cursor-pointer hover:duration-700"
+                className="duration-700 w-full py-2 text-center border border-transparent bg-yellow-400 text-sm rounded-lg text-[#000000] font-extrabold tracking-widest hover:bg-transparent hover:border-yellow-400 hover:text-slate-900 hover:cursor-pointer hover:duration-700"
                 type="submit"
                 value="Submit"
               />
