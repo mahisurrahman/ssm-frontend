@@ -29,7 +29,7 @@ const ProductLists = () => {
           subtitle={"Choose Wisely from all of these Branded Collection"}
         ></TitleAndSubtitle>
 
-        <div className="w-full h-[60vh] grid grid-cols-4 gap-5 justify-start items-center">
+        <div className="w-full h-[60vh] grid grid-cols-4 gap-4 justify-start items-center">
           {currentProducts.map((product) => (
             <ProductItem key={product._id} product={product}></ProductItem>
           ))}

@@ -36,7 +36,7 @@ const NavMenus = () => {
           <h1>Active Products</h1>
         </div>
       </Link>
-      <Link onClick={hardReload}>
+      <Link to="">
         <div className="text-sm mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
           <MdOutlineBusinessCenter className="text-xl"></MdOutlineBusinessCenter>
           <h1>Sales</h1>
@@ -51,7 +51,7 @@ const NavMenus = () => {
       <div className="my-5">
         <hr />
       </div>
-      <Link to="">
+      <Link to="/all-products">
         <div className="text-sm mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
           <FcSalesPerformance className="text-xl"></FcSalesPerformance>
           <h1>All Products Lists</h1>
