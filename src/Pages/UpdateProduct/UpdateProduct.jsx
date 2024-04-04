@@ -1,14 +1,16 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle";
 import { Helmet } from "react-helmet";
 import useRequest from "../../apiService/useRequest";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const UpdateProduct = () => {
   const [prodDet, setProdDet] = useState([]);
   const [stockDet, setStockDet] = useState([]);
   const [postRequest, getRequest] = useRequest();
   const { productId } = useParams();
+  const navigate = useNavigate();
 
   let findProd = async () => {
     let productDetails = await getRequest(`/products/src/${productId}`);
@@ -17,7 +19,6 @@ const UpdateProduct = () => {
 
   let findStock = async () => {
     let stockDetails = await getRequest(`/stocks/src/${productId}`);
-    console.log(stockDetails);
     setStockDet(stockDetails?.data?.data);
   };
 
@@ -28,6 +29,45 @@ const UpdateProduct = () => {
   useEffect(() => {
     findStock();
   }, []);
+
+  let updateProdStock = null;
+
+  const handleUpdateData = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const uptProductName = form.uptProductName.value || prodDet.productName;
+    const uptStockQuantity =
+      form.uptProductQuantity.value || stockDet.stockQuantity;
+    const uptDescription =
+      form.uptProductDescription.valuel || prodDet.description;
+    const uptBuyingPrice = form.uptProductBuyingPrice.value || prodDet.price;
+    const uptProductImage = form.uptProductImageUrl.value || prodDet.productImg;
+
+    const uptProductDetails = {
+      productName: uptProductName,
+      description: uptDescription,
+      stockQuantity: uptStockQuantity,
+      price: uptBuyingPrice,
+      productImg: uptProductImage,
+    };
+
+    let updateProduct = await postRequest(
+      `/products/upt/${productId}`,
+      uptProductDetails
+    );
+
+    console.log(updateProduct);
+    if (updateProduct) {
+      console.log("hit");
+      let updateProdStock = await postRequest(
+        `/stocks/upt/${productId}`,
+        uptProductDetails.stockQuantity
+      );
+
+      Swal.fire("Successfully Updated the Product Information");
+      navigate("/products-list");
+    }
+  };
 
   return (
     <div>
@@ -42,7 +82,7 @@ const UpdateProduct = () => {
           ></TitleAndSubtitle>
         </div>
         <div className="w-10/12 mx-auto mt-5">
-          <form>
+          <form onSubmit={handleUpdateData}>
             <div className="flex gap-2">
               <input
                 className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"

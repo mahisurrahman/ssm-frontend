@@ -95,7 +95,7 @@ const CreateProduct = () => {
             </div>
             <div className="w-full mt-5">
               <input
-                className="duration-700 w-full py-2 text-center border border-transparent bg-yellow-400 text-sm rounded-lg text-[#000000] font-extrabold tracking-widest hover:bg-transparent hover:border-yellow-400 hover:text-slate-900 hover:cursor-pointer hover:duration-700"
+                className="duration-700 w-full py-2 text-center border border-transparent bg-yellow-400 text-sm rounded-lg text-[#000000] font-extrabold tracking-widest hover:bg-transparent hover:border-yellow-400 hover:uptProductDetailstext-slate-900 hover:cursor-pointer hover:duration-700"
                 type="submit"
                 value="Submit"
               />
