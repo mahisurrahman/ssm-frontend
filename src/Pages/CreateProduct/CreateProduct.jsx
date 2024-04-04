@@ -51,7 +51,7 @@ const CreateProduct = () => {
         <title>Super Shop | Create Product</title>
       </Helmet>
       <div className="px-4 py-2">
-        <div className="py-2">
+        <div className="">
           <TitleAndSubtitle
             title={"Create Product"}
             subtitle={"Fill Up The Information with Precision"}
@@ -61,33 +61,33 @@ const CreateProduct = () => {
           <form onSubmit={handleAddProduct}>
             <div className="flex gap-2">
               <input
-                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#FFBE00] placeholder:text-sm"
                 type="text"
                 name="productName"
                 placeholder="Product Name"
               />
               <input
-                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#FFBE00] placeholder:text-sm"
                 type="number"
                 name="productQuantity"
                 placeholder="Product Quantity"
               />
             </div>
             <textarea
-              className="h-[150px] mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+              className="h-[150px] mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#FFBE00] placeholder:text-sm"
               type="text"
               name="productDescription"
               placeholder="Product Description"
             />
             <div className="flex gap-2">
               <input
-                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#FFBE00] placeholder:text-sm"
                 type="number"
                 name="productBuyingPrice"
                 placeholder="Product Buying Price"
               />
               <input
-                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#3000C0] placeholder:text-sm"
+                className="mb-4 w-full py-2 px-4 text-sm font-semibold tracking-widest rounded-lg bg-transparent text-slate-900 border-2 border-[#FFBE00] placeholder:text-sm"
                 type="text"
                 name="productImageUrl"
                 placeholder="Image URL"
@@ -103,7 +103,7 @@ const CreateProduct = () => {
           </form>
           <div className="flex items-center justify-center mt-5">
             <Link to="/products-list">
-              <button className="duration-700 px-10 py-2 rounded-lg border-2 border-transparent text-lg bg-[#3000C0] font-extrabold tracking-widest hover:bg-transparent text-slate-100 hover:text-[#3000C0] hover:border-[#3000C0] hover:duration-700 hover:cursor-pointer">
+              <button className="duration-700 px-10 py-2 rounded-lg border-2 border-transparent text-lg bg-[#BBAB8C] font-extrabold tracking-widest hover:bg-transparent text-slate-100 hover:text-[#BBAB8C] hover:border-[#FFBE00] hover:duration-700 hover:cursor-pointer">
                 See All Products
               </button>
             </Link>

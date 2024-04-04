@@ -2,17 +2,14 @@ import { HiMiniShoppingCart } from "react-icons/hi2";
 import { MdModeEdit } from "react-icons/md";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { GrOverview } from "react-icons/gr";
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider/AuthProviders";
-import command from "nodemon/lib/config/command";
 import useRequest from "../../apiService/useRequest";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ProductItem = ({ product }) => {
-  // console.log(product);
   const [postRequest, getRequest] = useRequest();
   const [stock, setStock] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,7 +70,7 @@ const ProductItem = ({ product }) => {
         <h2 className="my-1 text-md font-bold">
           Stock Remaining: <span className="text-green-500">{stock}</span>
         </h2>
-        <div className="flex justify-between mt-10 w-8/12 mx-auto">
+        <div className="flex justify-between mt-10 w-11/12 mx-auto gap-4">
           <button className="px-2 py-2 border-2 rounded-lg text-xl bg-yellow-400 border-yellow-400 text-slate-100 duration-700 hover:bg-slate-100 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700">
             <GrOverview onClick={openModal}></GrOverview>
           </button>

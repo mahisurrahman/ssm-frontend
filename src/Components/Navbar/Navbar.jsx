@@ -7,7 +7,7 @@ const Navbar = () => {
       <div className="px-4 py-4">
         <NavImgTitle></NavImgTitle>
       </div>
-      <div className="px-6 py-2">
+      <div className="px-6 ">
         <NavMenus></NavMenus>
       </div>
     </div>
