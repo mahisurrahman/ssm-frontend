@@ -5,6 +5,7 @@ import CreateProduct from "../../Pages/CreateProduct/CreateProduct";
 import ProductLists from "../../Pages/ProductList/ProductLists";
 import AllProducts from "../../Pages/AllProducts/AllProducts";
 import UpdateProduct from "../../Pages/UpdateProduct/UpdateProduct";
+import Loading from "../../Components/Loading/Loading";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/update-product/:productId",
         element: <UpdateProduct></UpdateProduct>,
+      },
+      {
+        path: "/loading",
+        element: <Loading></Loading>,
       },
     ],
   },

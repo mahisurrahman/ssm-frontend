@@ -10,16 +10,19 @@ const UpdateProduct = () => {
   const [stockDet, setStockDet] = useState([]);
   const [postRequest, getRequest] = useRequest();
   const { productId } = useParams();
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   let findProd = async () => {
     let productDetails = await getRequest(`/products/src/${productId}`);
-    setProdDet(productDetails?.data?.response?.data);
+    let response = productDetails?.data?.response?.data;
+    setProdDet(response);
   };
 
   let findStock = async () => {
     let stockDetails = await getRequest(`/stocks/src/${productId}`);
-    setStockDet(stockDetails?.data?.data);
+    let response = stockDetails?.data?.data;
+    setStockDet(response);
   };
 
   useEffect(() => {
@@ -30,42 +33,53 @@ const UpdateProduct = () => {
     findStock();
   }, []);
 
-  let updateProdStock = null;
-
   const handleUpdateData = async (event) => {
     event.preventDefault();
     const form = event.target;
-    const uptProductName = form.uptProductName.value || prodDet.productName;
-    const uptStockQuantity =
-      form.uptProductQuantity.value || stockDet.stockQuantity;
-    const uptDescription =
-      form.uptProductDescription.valuel || prodDet.description;
-    const uptBuyingPrice = form.uptProductBuyingPrice.value || prodDet.price;
-    const uptProductImage = form.uptProductImageUrl.value || prodDet.productImg;
+    const uptProductName = form.uptProductName.value;
+    const uptStockQuantity = form.uptProductQuantity.value;
+    const uptDescription = form.uptProductDescription.value;
+    const uptBuyingPrice = form.uptProductBuyingPrice.value;
+    const uptProductImage = form.uptProductImageUrl.value;
 
-    const uptProductDetails = {
-      productName: uptProductName,
-      description: uptDescription,
-      stockQuantity: uptStockQuantity,
-      price: uptBuyingPrice,
-      productImg: uptProductImage,
-    };
+    if (
+      uptProductName !== prodDet.productName ||
+      uptDescription !== prodDet.description ||
+      uptBuyingPrice !== prodDet.price ||
+      uptProductImage !== prodDet.productImg
+    ) {
+      const uptProductDetails = {
+        productName: uptProductName,
+        description: uptDescription,
+        price: uptBuyingPrice,
+        productImg: uptProductImage,
+      };
 
-    let updateProduct = await postRequest(
-      `/products/upt/${productId}`,
-      uptProductDetails
-    );
-
-    console.log(updateProduct);
-    if (updateProduct) {
-      console.log("hit");
-      let updateProdStock = await postRequest(
-        `/stocks/upt/${productId}`,
-        uptProductDetails.stockQuantity
+      let response = await postRequest(
+        `/products/upt/${productId}`,
+        uptProductDetails
       );
 
-      Swal.fire("Successfully Updated the Product Information");
-      navigate("/products-list");
+      if (response?.data?.response?.modifiedCount > 0) {
+        Swal.fire("Product Details Updated");
+        navigate("/all-products");
+      }
+    }
+
+    if (uptStockQuantity !== stockDet.stockQuantity) {
+      const uptProdStockDetails = {
+        stockQuantity: uptStockQuantity,
+      };
+
+      let response = await postRequest(
+        `/stocks/upt/${productId}`,
+        uptProdStockDetails
+      );
+
+      if (response?.data?.error === false) {
+        Swal.fire("Product Stocks Updated");
+        navigate("/all-products");
+      }
     }
   };
 
