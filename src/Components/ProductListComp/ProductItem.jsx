@@ -40,12 +40,13 @@ const ProductItem = ({ product }) => {
   const deleteProduct = async () => {
     let productDel = await getRequest(`/products/del/${prodId}`);
     console.log(productDel);
+    // when deleted remove the item from product
     setLoading(false);
 
     if (productDel) {
       console.log("hit", productDel?.data?.response?.data?.error);
       Swal.fire("Successfully Deleted").then(() => {
-        window.location.reload();
+        // window.location.reload();
       });
     }
   };

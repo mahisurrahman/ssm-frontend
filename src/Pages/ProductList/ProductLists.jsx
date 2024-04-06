@@ -1,12 +1,12 @@
 import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle";
 
 import { Helmet } from "react-helmet";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider/AuthProviders";
 import ProductItem from "../../Components/ProductListComp/ProductItem";
 
 const ProductLists = () => {
-  const { allProducts } = useContext(AuthContext);
+  const { allProducts, allStocks } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
   const productPerPage = 4;
 
@@ -17,6 +17,30 @@ const ProductLists = () => {
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const checkingStock = async () => {
+    console.log(allProducts, "All Products Lists");
+    console.log(allStocks, "All Products Lists -- s");
+
+    const mergedProducts = allProducts.map((product) => {
+      const foundStock = allStocks.find(
+        (stock) => stock.productId === product._id
+      );
+
+      if (foundStock) {
+        return {
+          ...product,
+          stockId: foundStock.stockId,
+          stockQuantity: foundStock.stockQuantity,
+        };
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkingStock();
+  }, [checkingStock]);
 
   return (
     <div>

@@ -11,10 +11,10 @@ import { MdOutlineBusinessCenter } from "react-icons/md";
 
 const NavMenus = () => {
   const navigate = useNavigate();
-  const hardReload = () => {
-    navigate("/products-list");
-    window.location.reload();
-  };
+  // const hardReload = () => {
+  //   navigate("/products-list");
+  //   window.location.reload();
+  // };
 
   return (
     <div className="text-slate-100">
@@ -30,7 +30,7 @@ const NavMenus = () => {
           <h1>Create Product</h1>
         </div>
       </Link>
-      <Link onClick={hardReload}>
+      <Link to="/products-list">
         <div className="text-xs mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
           <FaClipboardList className="text-xl"></FaClipboardList>
           <h1>Active Products</h1>
