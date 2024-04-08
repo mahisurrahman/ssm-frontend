@@ -1,22 +1,46 @@
 import { HiMiniShoppingCart } from "react-icons/hi2";
 import { MdModeEdit } from "react-icons/md";
-import { AiTwotoneDelete } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
 import { GrOverview } from "react-icons/gr";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider/AuthProviders";
 import useRequest from "../../apiService/useRequest";
+import { IoClose } from "react-icons/io5";
 import Swal from "sweetalert2";
 import Modal from "react-modal";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Loading from "../Loading/Loading";
 
 const ProductItem = ({ product }) => {
-  console.log(product);
   const [postRequest, getRequest] = useRequest();
-  const [stock, setStock] = useState([]);
+  const [cart, setCart] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { loading, setLoading } = useContext(AuthContext);
-  const location = useLocation();
   const navigate = useNavigate();
+
+  if (loading === true) {
+    return (
+      <div className="w-10/12 mx-auto h-[100vh] flex justify-center items-center">
+        <span className="loading loading-spinner loading-lg"></span>;
+      </div>
+    );
+  }
+
+  const handleCart = (p) => {
+    const carts = JSON.parse(localStorage.getItem("cart")) || [];
+    let filteredData = {
+      productId: p._id,
+      productName: p.productName,
+      stockId: p.stockId,
+      stockQuantity: p.stockQuantity,
+      sellingPrice: p.price,
+      productImg: p.productImg,
+      description: p.description,
+    };
+    let saveCart = [...carts, filteredData];
+    setCart(saveCart);
+    localStorage.setItem("cart", JSON.stringify(saveCart));
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -28,20 +52,41 @@ const ProductItem = ({ product }) => {
 
   let prodId = product._id;
   const deleteProduct = async () => {
-    let productDel = await getRequest(`/products/del/${prodId}`);
-    console.log(productDel);
-    setLoading(false);
-
-    if (productDel) {
-      console.log("hit", productDel?.data?.response?.data?.error);
-      Swal.fire("Successfully Deleted").then(() => {
-        // window.location.reload();
-      });
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setLoading(true);
+        let deleteProd = async () => {
+          let productDel = await getRequest(`/products/del/${prodId}`);
+          console.log(productDel);
+        };
+        deleteProd();
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+        setLoading(false);
+        closeModal();
+        navigate("/products-list");
+        // let reFetchProd = async () => {
+        //   let allProds = await getRequest(`/products/src`);
+        //   await setLoading(false);
+        // };
+        // reFetchProd();
+      }
+    });
   };
 
   return (
-    <div className="card bg-slate-100 shadow-xl">
+    <div className="card bg-[#ffefc9] shadow-xl">
       <figure>
         <img
           className="h-52 w-full object-cover"
@@ -52,32 +97,27 @@ const ProductItem = ({ product }) => {
       <div className="px-4 py-5">
         <h2 className="my-1 text-md font-bold">
           Prod Name:{" "}
-          <span className="text-green-500">{product.productName}</span>
+          <span className="font-normal tracking-wider">
+            {product.productName}
+          </span>
         </h2>
         <h2 className="my-1 text-md font-bold">
-          Price: <span className="text-green-500">{product.price}$</span>
+          Price:{" "}
+          <span className="font-normal tracking-wider">{product.price}$</span>
         </h2>
         <h2 className="my-1 text-md font-bold">
           Stock Remaining:{" "}
-          <span className="text-green-500">{product.stockQuantity}</span>
+          <span className="font-normal tracking-wider">
+            {product.stockQuantity}
+          </span>
         </h2>
-        <div className="flex justify-between mt-10 w-11/12 mx-auto gap-4">
-          <button className="px-2 py-2 border-2 rounded-lg text-xl bg-yellow-400 border-yellow-400 text-slate-100 duration-700 hover:bg-slate-100 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700">
-            <GrOverview onClick={openModal}></GrOverview>
-          </button>
-          <button className="px-2 py-2 border-2 rounded-lg text-xl bg-green-400 border-green-400 text-slate-100 duration-700 hover:bg-slate-100 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700">
-            <HiMiniShoppingCart></HiMiniShoppingCart>
-          </button>
-          <Link to={`/update-product/${product._id}`}>
-            <button className="px-2 py-2 border-2 rounded-lg text-xl bg-blue-400 border-blue-400 text-slate-100 duration-700 hover:bg-slate-100 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700">
-              <MdModeEdit></MdModeEdit>
-            </button>
-          </Link>
+        <div className="mt-10 w-11/12 mx-auto">
           <button
-            onClick={deleteProduct}
-            className="px-2 py-2 border-2 rounded-lg text-xl bg-red-400 border-red-400 text-slate-100 duration-700 hover:bg-slate-100 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700"
+            onClick={openModal}
+            className="w-full text-center px-2 py-2 border-2 rounded-lg text-xl bg-[#EAD196] border-[#EAD196] text-slate-900 duration-700 hover:scale-150 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700 flex items-center justify-center gap-2 font-bold"
           >
-            <AiTwotoneDelete></AiTwotoneDelete>
+            <GrOverview></GrOverview>
+            Show Details
           </button>
         </div>
       </div>
@@ -98,9 +138,9 @@ const ProductItem = ({ product }) => {
           },
         }}
       >
-        <div className="w-[500px]">
+        <div className="w-[800px] h-[90vh]">
           <img
-            className="w-[100%] h-[250px] object-cover"
+            className="w-[100%] h-[400px] object-cover"
             src={product.productImg}
             alt=""
           />
@@ -108,22 +148,50 @@ const ProductItem = ({ product }) => {
             <h2 className="text-2xl font-semibold text-slate-700">
               Name: <span className="font-normal">{product.productName}</span>
             </h2>
-            <p className="text-sm font-bold text-slate-700">
+            <p className="text-lg font-bold text-slate-700 h-[100px] overflow-y-auto">
               Description:{" "}
               <span className="font-normal">{product.description}</span>
             </p>
-            <p className="mt-5 text-sm font-bold text-slate-700">
-              Price: <span>{product.price}$</span>
+            <p className="mt-5 text-md font-bold text-slate-700">
+              Price: <span className="font-normal">{product.price}$</span>
             </p>
-            <p className="text-sm font-bold text-slate-700">
-              Stock: <span>{stock} Remaining</span>
+            <p className="text-md font-bold text-slate-700">
+              Stock:{" "}
+              <span className="font-normal">
+                {product.stockQuantity} Remaining
+              </span>
             </p>
-            <button
-              className="mt-5 px-2 py-2 text-xs text-slate-100 border border-red-400 bg-red-400 rounded-sm font-semibold duration-700 hover:duration-700 hover:cursor-pointer hover:bg-transparent hover:text-red-400"
-              onClick={closeModal}
-            >
-              Close Modal
-            </button>
+            <div className="mt-5 grid grid-cols-4 gap-5">
+              <button
+                onClick={() => {
+                  handleCart(product);
+                }}
+                className="w-full h-[50px] text-center px-2 py-2 border-2 rounded-lg text-xl bg-[#EAD196] border-[#EAD196] text-slate-900 duration-700 hover:bg-green-200 hover:text-slate-900 hover:cursor-pointer hover:scale-90  hover:border-slate-900 hover:duration-700 flex items-center justify-center gap-2 font-bold"
+              >
+                <HiMiniShoppingCart></HiMiniShoppingCart>
+                Buy Now
+              </button>
+              <Link to={`/update-product/${product._id}`}>
+                <button className="w-full h-[50px] text-center px-2 py-2 border-2 rounded-lg text-xl bg-[#EAD196] border-[#EAD196] text-slate-900 duration-700 hover:bg-blue-200 hover:text-slate-900 hover:scale-150 hover:cursor-pointer hover:border-slate-900 hover:duration-700 flex items-center justify-center gap-2 font-bold">
+                  <MdModeEdit></MdModeEdit>
+                  Edit Info
+                </button>
+              </Link>
+              <button
+                onClick={deleteProduct}
+                className="w-full h-[50px] text-center px-2 py-2 border-2 rounded-lg text-xl bg-[#EAD196] border-[#EAD196] text-slate-900 duration-700 hover:bg-red-200 hover:text-slate-900 hover:cursor-pointer hover:scale-150  hover:border-slate-900 hover:duration-700 flex items-center justify-center gap-2 font-bold"
+              >
+                <MdDelete className="text-slate-900"></MdDelete>
+                Delete
+              </button>
+              <button
+                className="flex items-center justify-center gap-2 w-full h-[50px] px-2 py-2 text-xl text-slate-900 border bg-[#EAD196] border-[#EAD196] rounded-lg font-semibold duration-700 hover:duration-700 hover:scale-90 hover:cursor-pointer hover:bg-pink-200 hover:text-red-400"
+                onClick={closeModal}
+              >
+                <IoClose></IoClose>
+                Close Modal
+              </button>
+            </div>
           </div>
         </div>
       </Modal>

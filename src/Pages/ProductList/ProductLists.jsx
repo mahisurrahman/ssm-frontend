@@ -48,7 +48,6 @@ const ProductLists = () => {
         return null;
       }
     });
-    console.log("????", fnalData);
     setMergedInfo(fnalData);
   };
 
@@ -57,7 +56,6 @@ const ProductLists = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(mergedInfo, "mergedInfo");
 
   return (
     <div>
@@ -69,8 +67,6 @@ const ProductLists = () => {
           title={"Active Products"}
           subtitle={"Choose Wisely from all of these Branded Collection"}
         ></TitleAndSubtitle>
-
-        {console.log(mergedInfo, "currentProducts")}
         <div className="w-full h-[60vh] grid grid-cols-4 gap-4 justify-start items-center">
           {mergedInfo.map((product) => (
             <ProductItem key={product._id} product={product}></ProductItem>

@@ -11,40 +11,36 @@ const AuthProviders = ({ children }) => {
   const [allStocks, setAllStocks] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchProducts = async () => {
+    try {
+      let productsDetails = await getRequest(`/products/src`);
+      setAllProducts(productsDetails?.data?.data || []);
 
-    const fetchProducts = async () => {
-      try {
-        let productsDetails = await getRequest(`/products/src`);
-        setAllProducts(productsDetails?.data?.data || []);
-  
-        let stockDetails = await getRequest(`/stocks/src`);
-        setAllStocks(stockDetails?.data?.data || []);
-        setLoading(false);
-      } catch (error) {
-        
-        console.log(error)
-      }
-   
+      let stockDetails = await getRequest(`/stocks/src`);
+      setAllStocks(stockDetails?.data?.data || []);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    useEffect(() => {
-      fetchProducts();
-    }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
-    const authInfo = {
-      allProducts,
-      allStocks,
-      setAllStocks,
-      setAllProducts,
-      loading,
-      setLoading,
-      fetchProducts,
-    };
+  const authInfo = {
+    allProducts,
+    allStocks,
+    setAllStocks,
+    setAllProducts,
+    loading,
+    setLoading,
+    fetchProducts,
+  };
 
-    return (
-      <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
-    );
-  } 
-
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
+};
 
 export default AuthProviders;
