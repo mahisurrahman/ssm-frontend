@@ -10,23 +10,13 @@ import Modal from "react-modal";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ProductItem = ({ product }) => {
+  console.log(product);
   const [postRequest, getRequest] = useRequest();
   const [stock, setStock] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { loading, setLoading } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-
-  const stockId = product._id;
-  let stockFetch = async () => {
-    let stockQty = await getRequest(`/stocks/src/${stockId}`);
-    setStock(stockQty.data.data.stockQuantity);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    stockFetch();
-  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -40,7 +30,6 @@ const ProductItem = ({ product }) => {
   const deleteProduct = async () => {
     let productDel = await getRequest(`/products/del/${prodId}`);
     console.log(productDel);
-    // when deleted remove the item from product
     setLoading(false);
 
     if (productDel) {
@@ -69,7 +58,8 @@ const ProductItem = ({ product }) => {
           Price: <span className="text-green-500">{product.price}$</span>
         </h2>
         <h2 className="my-1 text-md font-bold">
-          Stock Remaining: <span className="text-green-500">{stock}</span>
+          Stock Remaining:{" "}
+          <span className="text-green-500">{product.stockQuantity}</span>
         </h2>
         <div className="flex justify-between mt-10 w-11/12 mx-auto gap-4">
           <button className="px-2 py-2 border-2 rounded-lg text-xl bg-yellow-400 border-yellow-400 text-slate-100 duration-700 hover:bg-slate-100 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700">

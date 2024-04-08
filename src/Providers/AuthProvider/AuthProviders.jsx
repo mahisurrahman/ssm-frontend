@@ -16,11 +16,9 @@ const AuthProviders = ({ children }) => {
       try {
         let productsDetails = await getRequest(`/products/src`);
         setAllProducts(productsDetails?.data?.data || []);
-        console.log("productsDetails?.data?.data", productsDetails?.data?.data);
   
         let stockDetails = await getRequest(`/stocks/src`);
         setAllStocks(stockDetails?.data?.data || []);
-        console.log("stockDetails?.data?.data", stockDetails?.data?.data);
         setLoading(false);
       } catch (error) {
         

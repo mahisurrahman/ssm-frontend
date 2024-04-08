@@ -2,17 +2,21 @@ import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle
 
 import { Helmet } from "react-helmet";
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../Providers/AuthProvider/AuthProviders";
+// import { AuthContext } from "../../Providers/AuthProvider/AuthProviders";
 import ProductItem from "../../Components/ProductListComp/ProductItem";
+import Swal from "sweetalert2";
+import useRequest from "../../apiService/useRequest";
 
 const ProductLists = () => {
-  const { allProducts, allStocks } = useContext(AuthContext);
+  const [postRequest, getRequest] = useRequest();
+  // const { allProducts, allStocks } = useContext(AuthContext);
+  const [mergedInfo, setMergedInfo] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const productPerPage = 4;
 
   const lastProd = currentPage * productPerPage;
   const fristProd = lastProd - productPerPage;
-  const currentProducts = allProducts.slice(fristProd, lastProd);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -20,27 +24,40 @@ const ProductLists = () => {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const checkingStock = async () => {
-    console.log(allProducts, "All Products Lists");
-    console.log(allStocks, "All Products Lists -- s");
+    let fnalData = [];
+    let productsDetails = await getRequest(`/products/src`);
+    let allProducts = productsDetails?.data?.data;
 
-    const mergedProducts = allProducts.map((product) => {
+    let stockDetails = await getRequest(`/stocks/src`);
+
+    let allStocks = stockDetails?.data?.data;
+
+    fnalData = allProducts.map((product) => {
       const foundStock = allStocks.find(
         (stock) => stock.productId === product._id
       );
-
       if (foundStock) {
         return {
           ...product,
-          stockId: foundStock.stockId,
+          stockId: foundStock._id,
           stockQuantity: foundStock.stockQuantity,
         };
+      } else {
+        setLoading(false);
+        // Swal.fire("Failed to Show Products");
+        return null;
       }
     });
+    console.log("????", fnalData);
+    setMergedInfo(fnalData);
   };
 
   useEffect(() => {
     checkingStock();
-  }, [checkingStock]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(mergedInfo, "mergedInfo");
 
   return (
     <div>
@@ -53,15 +70,16 @@ const ProductLists = () => {
           subtitle={"Choose Wisely from all of these Branded Collection"}
         ></TitleAndSubtitle>
 
+        {console.log(mergedInfo, "currentProducts")}
         <div className="w-full h-[60vh] grid grid-cols-4 gap-4 justify-start items-center">
-          {currentProducts.map((product) => (
+          {mergedInfo.map((product) => (
             <ProductItem key={product._id} product={product}></ProductItem>
           ))}
         </div>
 
         <div className="flex justify-center mt-7">
           {Array.from(
-            { length: Math.ceil(allProducts.length / productPerPage) },
+            { length: Math.ceil(mergedInfo.length / productPerPage) },
             (_, index) => (
               <buttonfalse
                 key={index}
