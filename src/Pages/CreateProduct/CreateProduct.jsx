@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle";
 import { Helmet } from "react-helmet";
 import useRequest from "../../apiService/useRequest";
@@ -8,11 +8,12 @@ import Swal from "sweetalert2";
 const CreateProduct = () => {
   const [postRequest] = useRequest();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   if (loading === true) {
     return (
       <div className="w-10/12 mx-auto h-[100vh] flex justify-center items-center">
-        <span className="loading loading-spinner loading-lg"></span>;
+        <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
@@ -40,6 +41,7 @@ const CreateProduct = () => {
       Swal.fire(
         `Successfully Added the ${addProduct?.data?.response?.data?.productName} product`
       );
+      navigate('/products-list')
     } else {
       Swal.fire("Failed to Add");
     }
