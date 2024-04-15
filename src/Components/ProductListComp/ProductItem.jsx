@@ -27,20 +27,48 @@ const ProductItem = ({ product }) => {
   }
 
   const handleCart = (p) => {
-    const carts = JSON.parse(localStorage.getItem("cart")) || [];
-    let filteredData = {
-      productId: p._id,
-      productName: p.productName,
-      stockId: p.stockId,
-      stockQuantity: p.stockQuantity,
-      sellingPrice: p.price,
-      productImg: p.productImg,
-      description: p.description,
-    };
-    let saveCart = [...carts, filteredData];
-    setCart(saveCart);
-    localStorage.setItem("cart", JSON.stringify(saveCart));
+    const quantity = prompt("Enter the Quantity: ", "1");
+    if(quantity === null || quantity === ""){
+      Swal.fire('Invalid Quantity');
+      return;
+    }
+
+    const parseQuantity = parseInt(quantity);
+    if(isNaN(parseQuantity)|| parseQuantity <=0){
+      Swal.fire('Invalid Quantity Amount');
+      return;
+    }
+
+    let totalPrice = p.price * parseQuantity;
+    let carts = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const productExists = carts.findIndex(item => item.productId === p._id);
+    
+    if(productExists !== -1){
+      carts[productExists].purchasedQuantity += parseQuantity;
+      carts[productExists].totalPrice += totalPrice;
+    }else{
+      const filteredData = {
+        productId: p._id,
+        productName: p.productName,
+        stockId: p.stockId,
+        stockQuantity: p.stockQuantity,
+        sellingPrice: p.price,
+        productImg: p.productImg,
+        description: p.description,
+        purchasedQuantity: parseQuantity,
+        totalPrice: totalPrice,
+      };
+      carts.push(filteredData);
+    }
+    
+    // let saveCart = [...carts, filteredData];
+    // setCart(saveCart);
+    localStorage.setItem("cart", JSON.stringify(carts));
+
+    setCart(carts);
   };
+
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -76,11 +104,6 @@ const ProductItem = ({ product }) => {
         setLoading(false);
         closeModal();
         navigate("/products-list");
-        // let reFetchProd = async () => {
-        //   let allProds = await getRequest(`/products/src`);
-        //   await setLoading(false);
-        // };
-        // reFetchProd();
       }
     });
   };
@@ -114,7 +137,7 @@ const ProductItem = ({ product }) => {
         <div className="mt-10 w-11/12 mx-auto">
           <button
             onClick={openModal}
-            className="w-full text-center px-2 py-2 border-2 rounded-lg text-xl bg-[#EAD196] border-[#EAD196] text-slate-900 duration-700 hover:scale-150 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700 flex items-center justify-center gap-2 font-bold"
+            className="w-full text-center px-2 py-2 border-2 rounded-lg text-xl bg-[#EAD196] border-[#EAD196] text-slate-900 duration-700 hover:scale-110 hover:text-slate-900 hover:cursor-pointer hover:border-slate-900 hover:duration-700 flex items-center justify-center gap-2 font-bold"
           >
             <GrOverview></GrOverview>
             Show Details
