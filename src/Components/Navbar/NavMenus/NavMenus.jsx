@@ -8,13 +8,10 @@ import { FcBarChart } from "react-icons/fc";
 import { FcBullish } from "react-icons/fc";
 import { FcFilingCabinet } from "react-icons/fc";
 import { MdOutlineBusinessCenter } from "react-icons/md";
+import { FcDiploma2 } from "react-icons/fc";
 
 const NavMenus = () => {
   const navigate = useNavigate();
-  // const hardReload = () => {
-  //   navigate("/products-list");
-  //   window.location.reload();
-  // };
 
   return (
     <div className="text-slate-100">
@@ -61,6 +58,12 @@ const NavMenus = () => {
         <div className="text-xs mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
           <FcSalesPerformance className="text-xl"></FcSalesPerformance>
           <h1>Sales Management</h1>
+        </div>
+      </Link>
+      <Link to="">
+        <div className="text-xs mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
+          <FcDiploma2 className="text-xl"></FcDiploma2>
+          <h1>Receipts Management</h1>
         </div>
       </Link>
       <Link to="">

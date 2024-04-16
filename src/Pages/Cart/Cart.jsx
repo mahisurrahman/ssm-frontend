@@ -5,12 +5,13 @@ import { FcDown, FcUp } from "react-icons/fc";
 
 
 const Cart = () => {
+const [cartItems, setCartItems] = useState()
 
   let data = JSON.parse(localStorage.getItem("cart"));
   console.log(data);
 
-  const handleCartIncrease = ()=>{
-    console.log('Increase');
+  const handleCartIncrease = (prod)=>{
+    // let increaseQty = prod.purchasedQuantity + 1;
   };
 
   const handleCartDecrease = () =>{
@@ -63,7 +64,7 @@ const Cart = () => {
                     </td>
                     <td>
                       <div className="flex items-center gap-8 w-8/12">
-                        <FcUp onClick={handleCartIncrease} className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"></FcUp>
+                        <FcUp onClick={()=>{handleCartIncrease(prod)}} className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"></FcUp>
                         <p className="flex-grow">{prod.purchasedQuantity}</p>
                         <FcDown onClick={handleCartDecrease} className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"></FcDown>
                       </div>
