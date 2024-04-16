@@ -61,14 +61,13 @@ const ProductItem = ({ product }) => {
       };
       carts.push(filteredData);
     }
-    
-    // let saveCart = [...carts, filteredData];
-    // setCart(saveCart);
     localStorage.setItem("cart", JSON.stringify(carts));
-
     setCart(carts);
-  };
+    Swal.fire('Added to Cart');
+    setLoading(false);
+    navigate('/cart');
 
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
