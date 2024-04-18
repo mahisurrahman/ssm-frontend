@@ -39,25 +39,43 @@ const ProductItem = ({ product }) => {
       return;
     }
 
-    let totalPrice = p.price * parseQuantity;
+
+    const sellingPriceInitial = prompt("Enter the Selling price", `${p.price}`);
+    if(sellingPriceInitial === null || sellingPriceInitial === ""){
+      Swal.fire('Invalid Selling Price');
+      return;
+    }
+    
+    const sellingP = parseInt(sellingPriceInitial);
+    if(isNaN(sellingP)){
+      Swal.fire('Selling Amount is not a Number');
+      return;
+    }
+
+    let totalBuyingPrice = p.price * parseQuantity;
+    let totalSellingPrice = sellingP * parseQuantity;
     let carts = JSON.parse(localStorage.getItem("cart")) || [];
 
     const productExists = carts.findIndex(item => item.productId === p._id);
     
     if(productExists !== -1){
       carts[productExists].purchasedQuantity += parseQuantity;
-      carts[productExists].totalPrice += totalPrice;
+      carts[productExists].totalBuyingPrice += totalBuyingPrice;
+      carts[productExists].sellingPrice = sellingP;
+      carts[productExists].totalSellingPrice += totalSellingPrice;
     }else{
       const filteredData = {
         productId: p._id,
         productName: p.productName,
         stockId: p.stockId,
         stockQuantity: p.stockQuantity,
-        sellingPrice: p.price,
+        buyingPrice: p.price,
+        sellingPrice: sellingP,
         productImg: p.productImg,
         description: p.description,
         purchasedQuantity: parseQuantity,
-        totalPrice: totalPrice,
+        totalBuyingPrice: totalBuyingPrice,
+        totalSellingPrice: totalSellingPrice,
       };
       carts.push(filteredData);
     }

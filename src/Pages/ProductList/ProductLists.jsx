@@ -9,7 +9,6 @@ import useRequest from "../../apiService/useRequest";
 
 const ProductLists = () => {
   const [postRequest, getRequest] = useRequest();
-  // const { allProducts, allStocks } = useContext(AuthContext);
   const [mergedInfo, setMergedInfo] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +25,7 @@ const ProductLists = () => {
   const checkingStock = async () => {
     let fnalData = [];
     let productsDetails = await getRequest(`/products/src`);
+    console.log(productsDetails);
     let allProducts = productsDetails?.data?.data;
 
     let stockDetails = await getRequest(`/stocks/src`);
