@@ -3,9 +3,12 @@ import { Helmet } from "react-helmet";
 import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle";
 import { FcDown, FcUp } from "react-icons/fc";
 import Swal from "sweetalert2";
+import useRequest from "../../apiService/useRequest";
 
 const Cart = () => {
+  const [postRequest, getRequest] = useRequest();
   const [cartItems, setCartItems] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const saveCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -24,7 +27,6 @@ const Cart = () => {
           purchasedQuantity: updatedQuantity,
           totalBuyingPrice: updatedTotalCost,
           totalSellingPrice: updatedTotalSelling,
-
         };
       }
       return item;
@@ -35,25 +37,26 @@ const Cart = () => {
 
   const handleCartDecrease = (prod) => {
     let prodId = prod.productId;
-    const updateCart = cartItems.map((item) => {
-      if (item.productId === prodId) {
-        const updatedQuantity = item.purchasedQuantity - 1;
-        if(updatedQuantity < 1){
-          Swal.fire('Quantity Going Below 1');
-          return null;
+    const updateCart = cartItems
+      .map((item) => {
+        if (item.productId === prodId) {
+          const updatedQuantity = item.purchasedQuantity - 1;
+          if (updatedQuantity < 1) {
+            Swal.fire("Quantity Going Below 1");
+            return null;
+          }
+          const updatedTotalCost = updatedQuantity * item.buyingPrice;
+          const updatedTotalSelling = updatedQuantity * item.sellingPrice;
+          return {
+            ...item,
+            purchasedQuantity: updatedQuantity,
+            totalBuyingPrice: updatedTotalCost,
+            totalSellingPrice: updatedTotalSelling,
+          };
         }
-        const updatedTotalCost = updatedQuantity * item.buyingPrice;
-        const updatedTotalSelling = updatedQuantity * item.sellingPrice;
-        return {
-          ...item,
-          purchasedQuantity: updatedQuantity,
-          totalBuyingPrice: updatedTotalCost,
-          totalSellingPrice: updatedTotalSelling,
-
-        };
-      }
-      return item;
-    }).filter(Boolean);
+        return item;
+      })
+      .filter(Boolean);
     localStorage.setItem("cart", JSON.stringify(updateCart));
     setCartItems(updateCart);
   };
@@ -66,25 +69,82 @@ const Cart = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         const prodId = prod.productId;
-        const updateCart = cartItems.filter((item)=> item.productId !== prodId);
+        const updateCart = cartItems.filter(
+          (item) => item.productId !== prodId
+        );
         localStorage.setItem("cart", JSON.stringify(updateCart));
         setCartItems(updateCart);
         Swal.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
-          icon: "success"
+          icon: "success",
         });
       }
     });
-
   };
 
-  const handleCartConfirm = () => {
-    
+  const handleCartConfirm = (prod) => {
+    setIsLoading(true);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Confirm it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const prodId = prod.productId;
+          const prodDetails = cartItems.find(
+            (item) => item.productId === prodId
+          );
+          const response = await postRequest(`/sales/crt`, {
+            sales: [
+              {
+                productId: prodDetails.productId,
+                quantitySold: prodDetails.purchasedQuantity,
+                sellingPrice: prodDetails.sellingPrice,
+                buyingPrice: prodDetails.buyingPrice,
+              },
+            ],
+          });
+
+          if (response?.data?.error === false) {
+            Swal.fire({
+              title: "Confirmed Order!",
+              text: "Your Product Is Ordered.",
+              icon: "success",
+            });
+            const updatedCartItems = cartItems.filter(
+              (item) => item.productId !== prodId
+            );
+            localStorage.setItem("cart", JSON.stringify(updatedCartItems));
+            setCartItems(updatedCartItems);
+          }else{
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to confirm sales.",
+              icon: "error"
+            });
+          }
+        } catch (error) {
+          console.log("Error in Confirming Sales", error);
+          Swal.fire({
+            title: "Error!",
+            text: "Error occurred in Sales Creation.",
+            icon: "error"
+          })
+        }finally{
+          setIsLoading(false);
+        }
+      }
+    });
   };
   return (
     <div>
@@ -132,7 +192,7 @@ const Cart = () => {
                         ></FcUp>
                         <p className="flex-grow">{prod.purchasedQuantity}</p>
                         <FcDown
-                          onClick={()=>{
+                          onClick={() => {
                             handleCartDecrease(prod);
                           }}
                           className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"
@@ -143,19 +203,27 @@ const Cart = () => {
                     <td>{prod.totalSellingPrice}$</td>
                     <td>
                       <button
-                        onClick={()=>{handleCartDelete(prod)}}
+                        onClick={() => {
+                          handleCartDelete(prod);
+                        }}
                         className="px-6 py-2 bg-red-500 rounded-lg text-slate-100 font-bold text-md duration-700 hover:scale-125 hover:duration-700"
                       >
                         Delete
                       </button>
                     </td>
                     <td>
-                      <button
-                        onClick={handleCartConfirm}
-                        className="px-6 py-2 bg-green-500 rounded-lg text-slate-100 font-bold text-md duration-700 hover:scale-125 hover:duration-700"
-                      >
-                        Confirm
-                      </button>
+                    {isLoading ? (
+                        <span className="loading loading-spinner loading-lg"></span>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            handleCartConfirm(prod);
+                          }}
+                          className="px-6 py-2 bg-green-500 rounded-lg text-slate-100 font-bold text-md duration-700 hover:scale-125 hover:duration-700"
+                        >
+                          Confirm
+                        </button>
+                      )}
                     </td>
                   </tr>
                 </tbody>
