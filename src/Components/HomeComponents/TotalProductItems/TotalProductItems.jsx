@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import { BsBucket } from "react-icons/bs";
-import { AuthContext } from "../../../Providers/AuthProvider/AuthProviders";
+// import { AuthContext } from "../../../Providers/AuthProvider/AuthProviders";
 
-const TotalProductItems = () => {
-  const { allProducts } = useContext(AuthContext);
+const TotalProductItems = ({allProducts}) => {
   return (
     <div className="px-4 py-4 flex items-center justify-between border-2 bg-[#EAD196] border-[#3F4E4F] rounded-lg">
       <BsBucket className="text-6xl text-[#3F4E4F]"></BsBucket>
