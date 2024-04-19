@@ -24,10 +24,12 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const totalAmount = cartItems.reduce((total, item) => total + item.totalSellingPrice, 0);
+    const totalAmount = cartItems.reduce(
+      (total, item) => total + item.totalSellingPrice,
+      0
+    );
     setAmount(totalAmount);
   }, [cartItems]);
-
 
   return (
     <div>
@@ -43,38 +45,50 @@ const Home = () => {
         <div className="px-10 py-4">
           <hr />
         </div>
-        <div className="px-10 py-4">
-          <div className="overflow-x-auto">
-            <table className="table table-zebra bg-transparent">
-              <thead className="text-[#3F4E4F]">
-                <tr>
-                  <th>Item Name</th>
-                  <th>Item Id</th>
-                  <th>Quantity</th>
-                  <th>Cost</th>
-                </tr>
-              </thead>
-              {
-                cartItems.map((item)=> <tbody key={item._id} className="bg-transparent border-2 border-black">
-                <tr className="">
-                  <td>{item.productName}</td>
-                  <td>{item.productId}</td>
-                  <td>{item.purchasedQuantity}</td>
-                  <td>{item.totalSellingPrice}$</td>
-                </tr>
-              </tbody>)
-              }
-            </table>
-          </div>
-        </div>
-        <div className="mx-10 px-20 flex justify-between">
+        {cartItems.length <= 0 ? (
+          <>
+            <h1 className="text-xl font-bold text-center">No Products In your Cart Items</h1>
+          </>
+        ) : (
+          <div className="px-10 py-4">
+            <div className="overflow-x-auto">
+              <table className="table table-zebra bg-transparent">
+                <thead className="text-[#3F4E4F]">
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Item Id</th>
+                    <th>Quantity</th>
+                    <th>Cost</th>
+                  </tr>
+                </thead>
+                {cartItems.map((item) => (
+                  <tbody
+                    key={item._id}
+                    className="bg-transparent border-2 border-black"
+                  >
+                    <tr className="">
+                      <td>{item.productName}</td>
+                      <td>{item.productId}</td>
+                      <td>{item.purchasedQuantity}</td>
+                      <td>{item.totalSellingPrice}$</td>
+                    </tr>
+                  </tbody>
+                ))}
+              </table>
+            </div>
+            <div className="mx-10 px-20 flex justify-between">
               <h1 className="text-xl font-bold">Total: </h1>
               <h1 className="text-xl font-bold">{amount}$</h1>
-        </div>
-        <div className="flex justify-center items-center my-4">
-          <Link to="/cart">
-          <button className="px-6 py-2 rounded-lg bg-[#EAD196] font-bold text-slate-950 border-2 border-slate-950 duration-700 hover:duration-700 hover:scale-x-110">Handle Cart Items from Cart Page</button></Link>
-        </div>
+            </div>
+            <div className="flex justify-center items-center my-4">
+              <Link to="/cart">
+                <button className="px-6 py-2 rounded-lg bg-[#EAD196] font-bold text-slate-950 border-2 border-slate-950 duration-700 hover:duration-700 hover:scale-x-110">
+                  Handle Cart Items from Cart Page
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

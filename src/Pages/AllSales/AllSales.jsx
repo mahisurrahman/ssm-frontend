@@ -23,7 +23,6 @@ const AllSales = () => {
   }, []);
 
   const handleSalesView = async (item) => {
-    const saleId = item._id;
     let prod = await getRequest(`/products/src/${item.productId}`);
     let prodDetails = prod?.data?.response?.data;
 
@@ -32,6 +31,21 @@ const AllSales = () => {
     setProdDetails(prodDetails);
     setModalIsOpen(true);
   };
+
+  const formatDate = (timestamp)=>{
+    const date = new Date(timestamp);
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZone: "UTC"
+    };
+    return date.toLocaleDateString("en-US", options);
+  }
 
   return (
     <div>
@@ -48,12 +62,13 @@ const AllSales = () => {
             <table className="table table-zebra bg-transparent">
               <thead className="text-[#3F4E4F]">
                 <tr>
-                  <th>product Id</th>
+                  <th>Product Id</th>
                   <th>Quantity Sold</th>
                   <th>Selling Price</th>
                   <th>Buying Price</th>
                   <th>Profit</th>
                   <th>Loss</th>
+                  <th>Created Date</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -70,6 +85,7 @@ const AllSales = () => {
                     <td>{item.buyingPrice}</td>
                     <td>{item.profit}</td>
                     <td>{item.loss}</td>
+                    <td>{formatDate(item.createdDate)}</td>
                     <td>
                       <button
                         onClick={() => handleSalesView(item)}
@@ -112,9 +128,9 @@ const AllSales = () => {
             </div>
           </div>
         )}
-        <button className="mr-5 mt-10 text-white font-bold text-xl px-8 py-2 bg-red-400 rounded-lg duration-700 hover:duration-700 hover:scale-125" onClick={() => setModalIsOpen(false)}>Close</button>
-        <button className="mr-5 mt-10 text-white font-bold text-xl px-8 py-2 bg-red-600 rounded-lg duration-700 hover:duration-700-700 hover:scale-125">Delete Sales</button>
-        <button className="mr-5 mt-10 text-white font-bold text-xl px-8 py-2 bg-green-800 rounded-lg duration-700 hover:duration-700-700 hover:scale-125">Edit Sales</button>
+        <button className="mr-5 mt-10 text-white font-bold text-xl px-8 py-2 bg-red-600 rounded-lg duration-700 hover:duration-700 hover:scale-125" onClick={() => setModalIsOpen(false)}>Close</button>
+        {/* <button className="mr-5 mt-10 text-white font-bold text-xl px-8 py-2 bg-red-600 rounded-lg duration-700 hover:duration-700-700 hover:scale-125">Delete Sales</button>
+        <button className="mr-5 mt-10 text-white font-bold text-xl px-8 py-2 bg-green-800 rounded-lg duration-700 hover:duration-700-700 hover:scale-125">Edit Sales</button> */}
       </Modal>
     </div>
   );
