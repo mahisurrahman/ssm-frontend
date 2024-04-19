@@ -33,7 +33,7 @@ const NavMenus = () => {
           <h1>Active Products</h1>
         </div>
       </Link>
-      <Link to="">
+      <Link to="/all-sales">
         <div className="text-xs mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
           <MdOutlineBusinessCenter className="text-xl"></MdOutlineBusinessCenter>
           <h1>Sales</h1>

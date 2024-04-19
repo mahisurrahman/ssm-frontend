@@ -25,11 +25,9 @@ const ProductLists = () => {
   const checkingStock = async () => {
     let fnalData = [];
     let productsDetails = await getRequest(`/products/src`);
-    console.log(productsDetails);
     let allProducts = productsDetails?.data?.data;
 
     let stockDetails = await getRequest(`/stocks/src`);
-
     let allStocks = stockDetails?.data?.data;
 
     fnalData = allProducts.map((product) => {

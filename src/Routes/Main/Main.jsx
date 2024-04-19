@@ -7,6 +7,7 @@ import AllProducts from "../../Pages/AllProducts/AllProducts";
 import UpdateProduct from "../../Pages/UpdateProduct/UpdateProduct";
 import Loading from "../../Components/Loading/Loading";
 import Cart from "../../Pages/Cart/Cart";
+import AllSales from "../../Pages/AllSales/AllSales";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/all-products",
         element: <AllProducts></AllProducts>,
+      },
+      {
+        path: "/all-sales",
+        element: <AllSales></AllSales>,
       },
       {
         path: "/update-product/:productId",

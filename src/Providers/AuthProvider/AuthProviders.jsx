@@ -9,6 +9,8 @@ const AuthProviders = ({ children }) => {
   const [postRequest, getRequest] = useRequest();
   const [allProducts, setAllProducts] = useState([]);
   const [allStocks, setAllStocks] = useState([]);
+  const [allSales, setAllSales] = useState([]);
+  const [allReceipts, setAllReceipts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
@@ -18,6 +20,13 @@ const AuthProviders = ({ children }) => {
 
       let stockDetails = await getRequest(`/stocks/src`);
       setAllStocks(stockDetails?.data?.data || []);
+
+      let salesDetails = await getRequest(`/sales/src`);
+      setAllSales(salesDetails?.data?.data || []);
+
+      let receiptDetails = await getRequest(`/receipts/src`);
+      setAllReceipts(receiptDetails?.data?.data || []);
+      
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -31,6 +40,10 @@ const AuthProviders = ({ children }) => {
   const authInfo = {
     allProducts,
     allStocks,
+    allSales,
+    allReceipts,
+    setAllSales,
+    setAllReceipts,
     setAllStocks,
     setAllProducts,
     loading,

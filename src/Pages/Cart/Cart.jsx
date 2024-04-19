@@ -146,6 +146,8 @@ const Cart = () => {
       }
     });
   };
+
+  
   return (
     <div>
       <Helmet>
