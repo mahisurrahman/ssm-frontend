@@ -8,11 +8,12 @@ import UpdateProduct from "../../Pages/UpdateProduct/UpdateProduct";
 import Loading from "../../Components/Loading/Loading";
 import Cart from "../../Pages/Cart/Cart";
 import AllSales from "../../Pages/AllSales/AllSales";
+import Login from "../../Components/login/Login";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout></MainLayout>,
+    element: <Login></Login>,
     children: [
       {
         path: "/",

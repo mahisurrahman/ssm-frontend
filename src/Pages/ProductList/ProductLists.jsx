@@ -1,11 +1,8 @@
-import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle";
-
 import { Helmet } from "react-helmet";
-import { useContext, useEffect, useState } from "react";
-// import { AuthContext } from "../../Providers/AuthProvider/AuthProviders";
+import { useEffect, useState } from "react";
 import ProductItem from "../../Components/ProductListComp/ProductItem";
-import Swal from "sweetalert2";
 import useRequest from "../../apiService/useRequest";
+import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle";
 
 const ProductLists = () => {
   const [postRequest, getRequest] = useRequest();
@@ -14,68 +11,77 @@ const ProductLists = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productPerPage = 4;
 
-  const lastProd = currentPage * productPerPage;
-  const fristProd = lastProd - productPerPage;
-
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const checkingStock = async () => {
-    let fnalData = [];
-    let productsDetails = await getRequest(`/products/src`);
-    let allProducts = productsDetails?.data?.data;
+  const fetchData = async () => {
+    try {
+      const productsResponse = await getRequest(`/products/src`);
+      const stocksResponse = await getRequest(`/stocks/src`);
 
-    let stockDetails = await getRequest(`/stocks/src`);
-    let allStocks = stockDetails?.data?.data;
+      const products = productsResponse?.data?.data || [];
+      const stocks = stocksResponse?.data?.data || [];
 
-    fnalData = allProducts.map((product) => {
-      const foundStock = allStocks.find(
-        (stock) => stock.productId === product._id
-      );
-      if (foundStock) {
-        return {
-          ...product,
-          stockId: foundStock._id,
-          stockQuantity: foundStock.stockQuantity,
-        };
-      } else {
-        setLoading(false);
-        // Swal.fire("Failed to Show Products");
-        return null;
-      }
-    });
-    setMergedInfo(fnalData);
+      const mergedData = products.map((product) => {
+        const stock = stocks.find((stock) => stock.productId === product._id);
+        if (stock) {
+          return {
+            ...product,
+            stockId: stock._id,
+            stockQuantity: stock.stockQuantity,
+          };
+        } else {
+          return null;
+        }
+      });
+
+      setMergedInfo(mergedData.filter(Boolean));
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    checkingStock();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchData();
   }, []);
 
+  const indexOfLastProduct = currentPage * productPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productPerPage;
+  const currentProducts = mergedInfo.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   return (
     <div>
       <Helmet>
         <title>Super Shop | Product List</title>
       </Helmet>
-      <div className="px-4 py-4">
+      <div className="mt-4">
         <TitleAndSubtitle
           title={"Active Products"}
           subtitle={"Choose Wisely from all of these Branded Collection"}
         ></TitleAndSubtitle>
+      </div>
+      <div className="px-4 pb-4">
         <div className="w-full h-[60vh] grid grid-cols-4 gap-4 justify-start items-center">
-          {mergedInfo.map((product) => (
-            <ProductItem key={product._id} product={product}></ProductItem>
-          ))}
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            currentProducts.map((product) => (
+              <ProductItem key={product._id} product={product} />
+            ))
+          )}
         </div>
 
         <div className="flex justify-center mt-7">
           {Array.from(
             { length: Math.ceil(mergedInfo.length / productPerPage) },
             (_, index) => (
-              <buttonfalse
+              <button
                 key={index}
                 onClick={() => paginate(index + 1)}
                 className={`mx-1 px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none ${
@@ -83,7 +89,7 @@ const ProductLists = () => {
                 }`}
               >
                 {index + 1}
-              </buttonfalse>
+              </button>
             )
           )}
         </div>

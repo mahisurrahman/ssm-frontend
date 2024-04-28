@@ -4,6 +4,7 @@ import TitleAndSubtitle from "../../Components/TitleAndSubtitle/TitleAndSubtitle
 import { FcDown, FcUp } from "react-icons/fc";
 import Swal from "sweetalert2";
 import useRequest from "../../apiService/useRequest";
+import { Fade } from "react-awesome-reveal";
 
 const Cart = () => {
   const [postRequest, getRequest] = useRequest();
@@ -126,11 +127,11 @@ const Cart = () => {
             );
             localStorage.setItem("cart", JSON.stringify(updatedCartItems));
             setCartItems(updatedCartItems);
-          }else{
+          } else {
             Swal.fire({
               title: "Error!",
               text: "Failed to confirm sales.",
-              icon: "error"
+              icon: "error",
             });
           }
         } catch (error) {
@@ -138,16 +139,15 @@ const Cart = () => {
           Swal.fire({
             title: "Error!",
             text: "Error occurred in Sales Creation.",
-            icon: "error"
-          })
-        }finally{
+            icon: "error",
+          });
+        } finally {
           setIsLoading(false);
         }
       }
     });
   };
 
-  
   return (
     <div>
       <Helmet>
@@ -158,81 +158,83 @@ const Cart = () => {
           title={"My Cart"}
           subtitle={"List of your Interested Products"}
         ></TitleAndSubtitle>
-        <div className="overflow-x-auto mx-10">
-          <div className="table-container">
-            <table className="table table-zebra bg-transparent">
-              <thead className="text-slate-900 text-xs">
-                <tr>
-                  <th>Product Name</th>
-                  <th>Buying Price</th>
-                  <th>Selling Price</th>
-                  <th>Stock Remaining</th>
-                  <th>Purchased Quantity</th>
-                  <th>Total Buying Cost</th>
-                  <th>Total Selling Cost</th>
-                  <th>Remove Product</th>
-                  <th>Confirm Product</th>
-                </tr>
-              </thead>
-              {cartItems?.map((prod) => (
-                <tbody
-                  key={prod._id}
-                  className="bg-transparent border-2 border-slate-900"
-                >
-                  <tr className="">
-                    <td className="font-bold">{prod.productName}</td>
-                    <td>{prod.buyingPrice}</td>
-                    <td>{prod.sellingPrice}</td>
-                    <td>{prod.stockQuantity - prod.purchasedQuantity}</td>
-                    <td>
-                      <div className="flex items-center gap-8 w-10/12">
-                        <FcUp
-                          onClick={() => {
-                            handleCartIncrease(prod);
-                          }}
-                          className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"
-                        ></FcUp>
-                        <p className="flex-grow">{prod.purchasedQuantity}</p>
-                        <FcDown
-                          onClick={() => {
-                            handleCartDecrease(prod);
-                          }}
-                          className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"
-                        ></FcDown>
-                      </div>
-                    </td>
-                    <td>{prod.totalBuyingPrice}$</td>
-                    <td>{prod.totalSellingPrice}$</td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          handleCartDelete(prod);
-                        }}
-                        className="px-6 py-2 bg-red-500 rounded-lg text-slate-100 font-bold text-md duration-700 hover:scale-125 hover:duration-700"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                    <td>
-                    {isLoading ? (
-                        <span className="loading loading-spinner loading-lg"></span>
-                      ) : (
+        <Fade cascadia duration={3000} damping={1.2} direction="right">
+          <div className="overflow-x-auto mx-10">
+            <div className="table-container">
+              <table className="table table-zebra bg-transparent">
+                <thead className="text-slate-900 text-xs">
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Buying Price</th>
+                    <th>Selling Price</th>
+                    <th>Stock Remaining</th>
+                    <th>Purchased Quantity</th>
+                    <th>Total Buying Cost</th>
+                    <th>Total Selling Cost</th>
+                    <th>Remove Product</th>
+                    <th>Confirm Product</th>
+                  </tr>
+                </thead>
+                {cartItems?.map((prod) => (
+                  <tbody
+                    key={prod._id}
+                    className="bg-transparent border-2 border-slate-900"
+                  >
+                    <tr className="">
+                      <td className="font-bold">{prod.productName}</td>
+                      <td>{prod.buyingPrice}</td>
+                      <td>{prod.sellingPrice}</td>
+                      <td>{prod.stockQuantity - prod.purchasedQuantity}</td>
+                      <td>
+                        <div className="flex items-center gap-8 w-10/12">
+                          <FcUp
+                            onClick={() => {
+                              handleCartIncrease(prod);
+                            }}
+                            className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"
+                          ></FcUp>
+                          <p className="flex-grow">{prod.purchasedQuantity}</p>
+                          <FcDown
+                            onClick={() => {
+                              handleCartDecrease(prod);
+                            }}
+                            className="text-2xl duration-700 hover:duration-700 hover:scale-150 border-2 rounded-lg bg-slate-100"
+                          ></FcDown>
+                        </div>
+                      </td>
+                      <td>{prod.totalBuyingPrice}$</td>
+                      <td>{prod.totalSellingPrice}$</td>
+                      <td>
                         <button
                           onClick={() => {
-                            handleCartConfirm(prod);
+                            handleCartDelete(prod);
                           }}
-                          className="px-6 py-2 bg-green-500 rounded-lg text-slate-100 font-bold text-md duration-700 hover:scale-125 hover:duration-700"
+                          className="px-6 py-2 bg-red-500 rounded-lg text-slate-100 font-bold text-md duration-700 hover:scale-125 hover:duration-700"
                         >
-                          Confirm
+                          Delete
                         </button>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              ))}
-            </table>
+                      </td>
+                      <td>
+                        {isLoading ? (
+                          <span className="loading loading-spinner loading-lg"></span>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              handleCartConfirm(prod);
+                            }}
+                            className="px-6 py-2 bg-green-500 rounded-lg text-slate-100 font-bold text-md duration-700 hover:scale-125 hover:duration-700"
+                          >
+                            Confirm
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                ))}
+              </table>
+            </div>
           </div>
-        </div>
+        </Fade>
       </div>
     </div>
   );
