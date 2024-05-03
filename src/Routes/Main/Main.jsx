@@ -13,7 +13,7 @@ import Login from "../../Components/login/Login";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login></Login>,
+    element: <MainLayout></MainLayout>,
     children: [
       {
         path: "/",

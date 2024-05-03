@@ -1,9 +1,27 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const navigate = useNavigate();
+
+    const handleLogin = (event)=>{
+        event.preventDetault();
+        const form = event.target;
+        const username = form.username.value;
+        const password = form.password.value;
+        if(username === "admin"){
+            if(password === "admin"){
+                navigate("/mainLayout");
+            }  
+        }else{
+            console.log("Errror");
+        }
+    }
+
+
   return (
     <div className="w-full h-screen bg-yellow-100 text-slate-950">
-      <div className="pt-20">
+      <div className="pt-14">
         <h1 className="font-extrabold text-3xl text-center uppercase">
           Welcome to <span className="text-blue-600">Super Shop</span>
         </h1>
@@ -14,24 +32,43 @@ const Login = () => {
           <span className="text-yellow-500">Panel</span>
         </h1>
       </div>
-      <div className="mt-10 w-6/12 mx-auto">
-        <form action="">
+      <div className="mt-16 w-4/12 mx-auto">
+        <form onSubmit={()=>{handleLogin(event)}}>
           <input
             type="text"
             name="username"
-            className="flex items-center w-full rounded-lg bg-slate-100 py-3 px-5 text-2xl placeholder:text-lg"
+            className="flex items-center w-full rounded-2xl bg-slate-100 py-3 px-5 text-2xl placeholder:text-lg"
             placeholder="username"
           />
           <input
             type="password"
             name="password"
-            className="flex items-center mt-10 w-full rounded-lg bg-slate-100 py-3 px-5 text-2xl placeholder:text-lg"
+            className="flex items-center mt-10 w-full rounded-2xl bg-slate-100 py-3 px-5 text-2xl placeholder:text-lg"
             placeholder="password"
           />
-          <div className="mt-10">
-            <input className=" " type="submit" value="Login" />
+          <div className="mt-10 flex justify-center items-center w-full">
+            <input
+              className="text-2xl font-extrabold bg-green-600 text-slate-100 py-2 rounded-xl duration-700 hover:bg-purple-600 hover:duration-700 hover:cursor-pointer w-full tracking-widest"
+              type="submit"
+              value="Login"
+            />
           </div>
         </form>
+        <div className="w-10/12 mx-auto">
+          <div className="mt-20 flex justify-between items-center">
+            <h1 className="text-md text-slate-500 font-bold tracking-widest">
+              New to Super Shop?
+            </h1>
+            <h1 className="text-xl text-slate-950 font-bold duration-700 hover:duration-700 hover:text-blue-700 hover:cursor-pointer">
+              Create Account
+            </h1>
+          </div>
+          <div className="mt-1 flex justify-center items-center">
+            <button className="w-full py-2 bg-yellow-400 text-md text-slate-100 rounded-xl font-bold duration-700 hover:duration-700 hover:bg-yellow-700 hover:text-slate-900">
+              Sign Up With Google
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
