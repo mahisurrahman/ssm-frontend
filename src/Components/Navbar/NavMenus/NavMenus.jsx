@@ -48,7 +48,7 @@ const NavMenus = () => {
         </Link>
       </Fade>
       <Fade cascadia duration={1400} damping={1.2} direction="left">
-        <Link to="">
+        <Link to="/receipts">
           <div className="text-xs mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
             <IoReceiptSharp className="text-xl"></IoReceiptSharp>
             <h1>Receipts</h1>

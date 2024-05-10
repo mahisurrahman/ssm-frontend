@@ -9,6 +9,7 @@ import Loading from "../../Components/Loading/Loading";
 import Cart from "../../Pages/Cart/Cart";
 import AllSales from "../../Pages/AllSales/AllSales";
 import Login from "../../Components/login/Login";
+import Receipts from "../../Pages/Receipts/Receipts";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/loading",
         element: <Loading></Loading>,
+      },
+      {
+        path: "/receipts",
+        element: <Receipts></Receipts>,
       },
     ],
   },
