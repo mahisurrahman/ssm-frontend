@@ -1,17 +1,23 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import useRequest from "../../apiService/useRequest";
-import Swal from "sweetalert2";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+// import auth from "../../firebase/firebase.config";
+import { getAuth } from "firebase/auth";
+import app from "../../firebase/firebase.config";
+
 
 export const AuthContext = createContext(null);
 
 const AuthProviders = ({ children }) => {
+  const auth = getAuth(app);
   const [postRequest, getRequest] = useRequest();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const [allProducts, setAllProducts] = useState([]);
   const [allStocks, setAllStocks] = useState([]);
   const [allSales, setAllSales] = useState([]);
   const [allReceipts, setAllReceipts] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
     try {
@@ -26,15 +32,34 @@ const AuthProviders = ({ children }) => {
 
       let receiptDetails = await getRequest(`/receipts/src`);
       setAllReceipts(receiptDetails?.data?.data || []);
-      
+
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+
+  const singInUser = (email, password) =>{
+    return signInWithEmailAndPassword(auth, email, password);
+    // setLoading(false);
+  }
+
+  const singOutUser = () =>{
+    return signOut(auth);
+    // setLoading(false);
+  }
+
   useEffect(() => {
     fetchProducts();
+    
+   const unsubscribe = onAuthStateChanged(auth, currentUser=>{
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return ()=>{
+      unsubscribe();
+    }
   }, []);
 
   const authInfo = {
@@ -47,8 +72,11 @@ const AuthProviders = ({ children }) => {
     setAllStocks,
     setAllProducts,
     loading,
+    singOutUser,
     setLoading,
     fetchProducts,
+    singInUser,
+    user,
   };
 
   return (

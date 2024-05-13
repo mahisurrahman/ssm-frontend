@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Providers/AuthProvider/AuthProviders";
+
 
 const Login = () => {
     const navigate = useNavigate();
+    const {singInUser} = useContext(AuthContext);
 
-    const handleLogin = (event)=>{
-        event.preventDetault();
+    const handleLogin = e =>{
+        e.preventDefault();
         const form = event.target;
-        const username = form.username.value;
+        const email = form.email.value;
         const password = form.password.value;
-        if(username === "admin"){
-            if(password === "admin"){
-                navigate("/mainLayout");
-            }  
-        }else{
-            console.log("Errror");
-        }
+        console.log(email, password);
+        singInUser(email, password)
+        .then(result=>{
+          console.log(result.user);
+          navigate("/");
+        })
+        .catch(error =>{
+          console.log(error);
+        })
+
     }
 
 
@@ -33,12 +39,12 @@ const Login = () => {
         </h1>
       </div>
       <div className="mt-16 w-4/12 mx-auto">
-        <form onSubmit={()=>{handleLogin(event)}}>
+        <form onSubmit={handleLogin}>
           <input
-            type="text"
-            name="username"
+            type="email"
+            name="email"
             className="flex items-center w-full rounded-2xl bg-slate-100 py-3 px-5 text-2xl placeholder:text-lg"
-            placeholder="username"
+            placeholder="email"
           />
           <input
             type="password"

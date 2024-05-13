@@ -10,6 +10,7 @@ import Cart from "../../Pages/Cart/Cart";
 import AllSales from "../../Pages/AllSales/AllSales";
 import Login from "../../Components/login/Login";
 import Receipts from "../../Pages/Receipts/Receipts";
+import PrivateRoute from "../../Routes/privateRoute/privateRoute";
 
 const router = createBrowserRouter([
   {
@@ -18,31 +19,31 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home></Home>,
+        element: <PrivateRoute><Home></Home></PrivateRoute>
       },
       {
         path: "/create-product",
-        element: <CreateProduct></CreateProduct>,
+        element: <PrivateRoute><CreateProduct></CreateProduct></PrivateRoute>,
       },
       {
         path: "/products-list",
-        element: <ProductLists></ProductLists>,
+        element: <PrivateRoute><ProductLists></ProductLists></PrivateRoute>,
       },
       {
         path: "/all-products",
-        element: <AllProducts></AllProducts>,
+        element: <PrivateRoute><AllProducts></AllProducts></PrivateRoute>,
       },
       {
         path: "/all-sales",
-        element: <AllSales></AllSales>,
+        element: <PrivateRoute><AllSales></AllSales></PrivateRoute>,
       },
       {
         path: "/update-product/:productId",
-        element: <UpdateProduct></UpdateProduct>,
+        element: <PrivateRoute><UpdateProduct></UpdateProduct></PrivateRoute>,
       },
       {
         path: "/cart",
-        element: <Cart></Cart>,
+        element: <PrivateRoute><Cart></Cart></PrivateRoute>,
       },
       {
         path: "/loading",
@@ -50,10 +51,14 @@ const router = createBrowserRouter([
       },
       {
         path: "/receipts",
-        element: <Receipts></Receipts>,
+        element: <PrivateRoute><Receipts></Receipts></PrivateRoute>,
       },
     ],
   },
+  {
+    path: "/login",
+    element: <Login></Login>
+  }
 ]);
 
 export default router;
