@@ -67,18 +67,10 @@ const NavMenus = () => {
         </Link>
       </Fade>
       <Fade cascadia duration={1800} damping={1.2} direction="left">
-        <Link to="">
+        <Link to="/dailySales">
           <div className="text-xs mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
             <FcBarChart className="text-xl"></FcBarChart>
             <h1>Daily Sales Report</h1>
-          </div>
-        </Link>
-      </Fade>
-      <Fade cascadia duration={2000} damping={1.2} direction="left">
-        <Link to="">
-          <div className="text-xs mb-3 px-2 py-[4px] bg-[#EAD196] text-slate-900 font-bold rounded-lg flex items-center gap-2 duration-1000 hover:bg-[#9BCF53] hover:duration-1000 hover:cursor-pointer">
-            <FcBullish className="text-xl"></FcBullish>
-            <h1>Monthly Sales Report</h1>
           </div>
         </Link>
       </Fade>

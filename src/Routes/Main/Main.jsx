@@ -11,6 +11,7 @@ import AllSales from "../../Pages/AllSales/AllSales";
 import Login from "../../Components/login/Login";
 import Receipts from "../../Pages/Receipts/Receipts";
 import PrivateRoute from "../../Routes/privateRoute/privateRoute";
+import DailySalesReport from "../../Pages/DailySalesReport/DailySalesReport";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
         path: "/receipts",
         element: <PrivateRoute><Receipts></Receipts></PrivateRoute>,
       },
+      {
+        path: "/dailySales",
+        element: <PrivateRoute><DailySalesReport></DailySalesReport></PrivateRoute>
+      }
     ],
   },
   {
